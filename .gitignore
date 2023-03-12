@@ -1,3 +1,11 @@
+[Bb]uild/
+[Bb]in/
+Vendor/*
+_sketch/
+.cache/
+.cache
+perf.data
+
 # Prerequisites
 *.d
 
