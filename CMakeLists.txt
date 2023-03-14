@@ -11,6 +11,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON) #Needed for LSPs
 # example usage of dependencies
 # include_directories(Vendor/json/include/)
 
+# for simple dependencies without CMakeLists.txt
 # file(GLOB VENDOR_SOURCE Vendor/simpleVendor/src/file.c
 #                         Vendor/simpleVendor2/src/file.c)
 
@@ -29,6 +30,7 @@ set(TARGET_RUNTIME ${SOURCE} ${HEADER})
 add_executable(${PROJECT_NAME}
                 ${SOURCE}
                 ${HEADER}
+								${VENDOR_SOURCE}
                 ${M_SOURCE}
                 ${M_HEADER})
 
