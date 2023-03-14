@@ -13,7 +13,7 @@
       "type": "lldb",
       "request": "launch",
       "name": "[lldb] Release",
-      "program": "${workspaceFolder}/Bin/release/MyProject",
+      "program": "${workspaceFolder}/bin/release/MyProject",
       "args": [],
       "cwd": "${workspaceFolder}/bin/release/"
     },
