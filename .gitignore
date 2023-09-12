@@ -6,6 +6,8 @@ _sketch/
 .cache
 perf.data
 
+.vs
+
 # Prerequisites
 *.d
 

@@ -15,6 +15,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON) #Needed for LSPs
 # file(GLOB VENDOR_SOURCE Vendor/simpleVendor/src/file.c
 #                         Vendor/simpleVendor2/src/file.c)
 
+
 file(GLOB_RECURSE SOURCE Source/*.cpp)
 file(GLOB_RECURSE HEADER Source/*.hpp)
 file(GLOB_RECURSE M_SOURCE Modules/*.cpp)
@@ -55,3 +56,12 @@ add_custom_command(
     TARGET ${PROJECT_NAME} POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/Resources $<TARGET_FILE_DIR:${PROJECT_NAME}>)
 
+# visual studio build fix for lsp
+add_custom_target(move_compile_commands
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        ${${PROJECT_NAME}_BINARY_DIR}/compile_commands.json
+        ${${PROJECT_NAME}_BINARY_DIR}/../compile_commands.json
+    DEPENDS ${${PROJECT_NAME}_BINARY_DIR}/compile_commands.json
+)
+# Add a dependency on move_compile_commands to ensure it runs before build
+add_dependencies(${PROJECT_NAME} move_compile_commands)
