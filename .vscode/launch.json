@@ -16,6 +16,7 @@
       "program": "${workspaceFolder}/bin/release/MyProject",
       "args": [],
       "cwd": "${workspaceFolder}/bin/release/"
-    },
+    }
   ]
+}
 

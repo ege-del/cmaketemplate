@@ -9,7 +9,7 @@
       "installRoot": "${projectDir}\\bin\\${name}",
       "cmakeCommandArgs": "",
       "buildCommandArgs": "",
-      "ctestCommandArgs": "",
+      "ctestCommandArgs": ""
     },
     {
       "name": "x64-Release-Deb",

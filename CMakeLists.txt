@@ -1,9 +1,13 @@
 cmake_minimum_required(VERSION 3.20)
 project(MyProject)
 
-set(CMAKE_C_STANDARD 99)
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_C_STANDARD 11)
+set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON) #Needed for LSPs 
+
+# set(ENABLE_VCPKG OFF)
+
+# find_program(CCACHE_PROGRAM ccache)
 
 # example usage of dependencies
 # add_subdirectory(Vendor/json)
@@ -15,6 +19,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON) #Needed for LSPs
 # file(GLOB VENDOR_SOURCE Vendor/simpleVendor/src/file.c
 #                         Vendor/simpleVendor2/src/file.c)
 
+option(PROJECT_CUSTOM_DEF "My compile definition" ON)
 
 file(GLOB_RECURSE SOURCE Source/*.cpp)
 file(GLOB_RECURSE HEADER Source/*.hpp)
@@ -35,33 +40,35 @@ add_executable(${PROJECT_NAME}
                 ${M_SOURCE}
                 ${M_HEADER})
 
-# json  example link
-target_link_libraries(${PROJECT_NAME})
+# link 'json' target_link_libraries(${PROJECT_NAME} json)
+target_link_libraries(${PROJECT_NAME} )
 
-# add_definitions(-D PROJECT_SOURCE_DIR=\"${PROJECT_SOURCE_DIR}\")
+add_definitions(-D PROJECT_SOURCE_DIR=\"${PROJECT_SOURCE_DIR}\")
 
-target_include_directories(${PROJECT_NAME} PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/Source"
-                                                  "${CMAKE_CURRENT_SOURCE_DIR}/Modules")
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin/${CMAKE_BUILD_TYPE}
+	CACHE PATH
+	"Single Directory for all Libraries"
+)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin/${CMAKE_BUILD_TYPE}
+	CACHE PATH
+	"Single Directory for all Executables."
+)
 
-set_target_properties(${PROJECT_NAME} PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin/${CMAKE_BUILD_TYPE})
+set_target_properties(${PROJECT_NAME} PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/Bin/${CMAKE_BUILD_TYPE})
+target_include_directories(${PROJECT_NAME} PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/Source" "${CMAKE_CURRENT_SOURCE_DIR}/Modules")
 
-if(MSVC)
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /std=c++17")
-else()
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17")
-endif()
+message(STATUS "## Listing Options #####################################")
+message(STATUS "## PROJECT_CUSTOM_DEF      ${PROJECT_CUSTOM_DEF}")
+message(STATUS "########################################################")
 
-
-add_custom_command(
-    TARGET ${PROJECT_NAME} POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/Resources $<TARGET_FILE_DIR:${PROJECT_NAME}>)
+add_custom_command( TARGET ${PROJECT_NAME} POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/Resources $<TARGET_FILE_DIR:${PROJECT_NAME}>)
 
 # visual studio build fix for lsp
 add_custom_target(move_compile_commands
-    COMMAND ${CMAKE_COMMAND} -E copy_if_different
-        ${${PROJECT_NAME}_BINARY_DIR}/compile_commands.json
-        ${${PROJECT_NAME}_BINARY_DIR}/../compile_commands.json
-    DEPENDS ${${PROJECT_NAME}_BINARY_DIR}/compile_commands.json
+  COMMAND ${CMAKE_COMMAND} -E copy_if_different
+    ${${PROJECT_NAME}_BINARY_DIR}/compile_commands.json
+    ${${PROJECT_NAME}_BINARY_DIR}/../compile_commands.json
+  DEPENDS ${${PROJECT_NAME}_BINARY_DIR}/compile_commands.json
 )
 # Add a dependency on move_compile_commands to ensure it runs before build
 add_dependencies(${PROJECT_NAME} move_compile_commands)

@@ -3,7 +3,22 @@ BasedOnStyle: Google
 UseTab: Always
 IndentWidth: 2
 TabWidth: 2
-SortIncludes: false
-Standard: Cpp17
-CompileFlags:
-  Add: [-std=c++17]
+SortIncludes: Never
+ColumnLimit: 0
+BreakBeforeConceptDeclarations: true
+BreakBeforeTernaryOperators: false
+BreakConstructorInitializers: AfterColon
+BreakInheritanceList: AfterComma
+BreakStringLiterals: true
+AlignEscapedNewlines: Left
+AlignConsecutiveAssignments: Consecutive
+AlignConsecutiveDeclarations: true
+PointerAlignment: Left
+QualifierAlignment: Left
+ReferenceAlignment: Left
+Cpp11BracedListStyle: true
+EmptyLineAfterAccessModifier: Never
+IndentCaseLabels: true
+IndentPPDirectives: BeforeHash
+SpaceAfterCStyleCast: false
+SpaceAfterTemplateKeyword: true
